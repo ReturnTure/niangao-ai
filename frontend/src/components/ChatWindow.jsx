@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import MessageBubble from "./MessageBubble";
 import TypingIndicator from "./TypingIndicator";
+import NiangaoSprite from "./NiangaoSprite";
 import { API_URL } from "../api/config";
 import { createSSEParser } from "../api/sse";
 import { motion, AnimatePresence } from "framer-motion";
@@ -197,11 +198,11 @@ export default function ChatWindow({ chat, setChat }) {
                     transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
                   />
                   <motion.div
-                    className="relative w-16 h-16 bg-gradient-to-br from-amber-300 to-orange-400 rounded-2xl flex items-center justify-center shadow-lg shadow-amber-900/40"
+                    className="relative"
                     animate={{ y: [0, -7, 0] }}
                     transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
                   >
-                    <span className="text-stone-900 font-bold text-2xl">年</span>
+                    <NiangaoSprite size={104} />
                   </motion.div>
                 </div>
 

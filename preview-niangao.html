@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>年糕形象 · 草图</title>
+<style>
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 26px;
+    background: #fffdf6;
+    font-family: system-ui, "Microsoft YaHei", sans-serif;
+    color: #57534e;
+  }
+  h1 { font-size: 15px; font-weight: 600; letter-spacing: 2px; margin: 0; color: #78716c; }
+  .hero { width: 480px; height: 480px; }
+  .sizes { display: flex; align-items: flex-end; gap: 44px; }
+  .size-item { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .size-item span { font-size: 11px; color: #a8a29e; }
+</style>
+</head>
+<body>
+
+<h1>年 糕 · 形 象 草 图</h1>
+
+<svg class="hero" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="ngBody" cx="34%" cy="28%" r="78%">
+      <stop offset="0%" stop-color="#FFFEFA" />
+      <stop offset="58%" stop-color="#FDF8EC" />
+      <stop offset="100%" stop-color="#F1E5CE" />
+    </radialGradient>
+    <linearGradient id="ngLeaf" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#AFCD9F" />
+      <stop offset="100%" stop-color="#7DA26E" />
+    </linearGradient>
+    <radialGradient id="ngShadow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#786F62" stop-opacity="0.22" />
+      <stop offset="100%" stop-color="#786F62" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="ngBlush" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#F2A88E" stop-opacity="0.72" />
+      <stop offset="55%" stop-color="#F2A88E" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#F2A88E" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <ellipse cx="100" cy="172" rx="56" ry="11" fill="url(#ngShadow)" />
+
+  <path d="M100 52 C141 52 168 80 168 114 C168 148 138 166 100 166 C62 166 32 148 32 114 C32 80 59 52 100 52 Z" fill="url(#ngBody)" />
+
+  
+  
+
+  <path d="M100 54 C100 46 100 42 100 38" stroke="#8CAE7C" stroke-width="3.2" stroke-linecap="round" />
+
+  <path d="M97 44 C82 40 62 32 50 18 C64 10 84 22 97 38 Z" fill="url(#ngLeaf)" />
+  <path d="M103 44 C118 40 138 32 150 18 C136 10 116 22 103 38 Z" fill="url(#ngLeaf)" />
+
+  <ellipse cx="60" cy="127" rx="19" ry="12" fill="url(#ngBlush)" />
+  <ellipse cx="140" cy="127" rx="19" ry="12" fill="url(#ngBlush)" />
+
+  <circle cx="77" cy="112" r="6.2" fill="#4A3A2C" />
+  <circle cx="123" cy="112" r="6.2" fill="#4A3A2C" />
+  <circle cx="79.4" cy="109.6" r="2" fill="#FFFFFF" opacity="0.92" />
+  <circle cx="125.4" cy="109.6" r="2" fill="#FFFFFF" opacity="0.92" />
+
+  <path d="M90 130 Q100 139 110 130" stroke="#4A3A2C" stroke-width="2.6" stroke-linecap="round" />
+</svg>
+
+<div class="sizes">
+  <div class="size-item">
+    <svg width="160" height="160" viewBox="0 0 200 200" fill="none">
+      <ellipse cx="100" cy="172" rx="56" ry="11" fill="#786F62" opacity="0.12" />
+      <path d="M100 52 C141 52 168 80 168 114 C168 148 138 166 100 166 C62 166 32 148 32 114 C32 80 59 52 100 52 Z" fill="#FDF8EC" />
+      
+      
+      <path d="M100 54 C100 46 100 42 100 38" stroke="#8CAE7C" stroke-width="3.2" stroke-linecap="round" />
+      <path d="M97 44 C82 40 62 32 50 18 C64 10 84 22 97 38 Z" fill="#96B887" />
+      <path d="M103 44 C118 40 138 32 150 18 C136 10 116 22 103 38 Z" fill="#96B887" />
+      <circle cx="60" cy="127" r="16" fill="#F2A88E" opacity="0.34" />
+      <circle cx="140" cy="127" r="16" fill="#F2A88E" opacity="0.34" />
+      <circle cx="77" cy="112" r="6.2" fill="#4A3A2C" />
+      <circle cx="123" cy="112" r="6.2" fill="#4A3A2C" />
+      <circle cx="79.4" cy="109.6" r="2" fill="#FFFFFF" opacity="0.92" />
+      <circle cx="125.4" cy="109.6" r="2" fill="#FFFFFF" opacity="0.92" />
+      <path d="M90 130 Q100 139 110 130" stroke="#4A3A2C" stroke-width="2.6" stroke-linecap="round" />
+    </svg>
+    <span>160 px</span>
+  </div>
+
+  <div class="size-item">
+    <svg width="104" height="104" viewBox="0 0 200 200" fill="none">
+      <ellipse cx="100" cy="172" rx="56" ry="11" fill="#786F62" opacity="0.12" />
+      <path d="M100 52 C141 52 168 80 168 114 C168 148 138 166 100 166 C62 166 32 148 32 114 C32 80 59 52 100 52 Z" fill="#FDF8EC" />
+      
+      
+      <path d="M100 54 C100 46 100 42 100 38" stroke="#8CAE7C" stroke-width="3.2" stroke-linecap="round" />
+      <path d="M97 44 C82 40 62 32 50 18 C64 10 84 22 97 38 Z" fill="#96B887" />
+      <path d="M103 44 C118 40 138 32 150 18 C136 10 116 22 103 38 Z" fill="#96B887" />
+      <circle cx="60" cy="127" r="16" fill="#F2A88E" opacity="0.34" />
+      <circle cx="140" cy="127" r="16" fill="#F2A88E" opacity="0.34" />
+      <circle cx="77" cy="112" r="6.2" fill="#4A3A2C" />
+      <circle cx="123" cy="112" r="6.2" fill="#4A3A2C" />
+      <circle cx="79.4" cy="109.6" r="2" fill="#FFFFFF" opacity="0.92" />
+      <circle cx="125.4" cy="109.6" r="2" fill="#FFFFFF" opacity="0.92" />
+      <path d="M90 130 Q100 139 110 130" stroke="#4A3A2C" stroke-width="2.6" stroke-linecap="round" />
+    </svg>
+    <span>104 px · 会话空态</span>
+  </div>
+
+  <div class="size-item">
+    <svg width="56" height="56" viewBox="0 0 200 200" fill="none">
+      <path d="M100 52 C141 52 168 80 168 114 C168 148 138 166 100 166 C62 166 32 148 32 114 C32 80 59 52 100 52 Z" fill="#FDF8EC" />
+      
+      
+      <path d="M100 54 C100 46 100 42 100 38" stroke="#8CAE7C" stroke-width="3.2" stroke-linecap="round" />
+      <path d="M97 44 C82 40 62 32 50 18 C64 10 84 22 97 38 Z" fill="#96B887" />
+      <path d="M103 44 C118 40 138 32 150 18 C136 10 116 22 103 38 Z" fill="#96B887" />
+      <circle cx="60" cy="127" r="16" fill="#F2A88E" opacity="0.34" />
+      <circle cx="140" cy="127" r="16" fill="#F2A88E" opacity="0.34" />
+      <circle cx="77" cy="112" r="6.2" fill="#4A3A2C" />
+      <circle cx="123" cy="112" r="6.2" fill="#4A3A2C" />
+      <circle cx="79.4" cy="109.6" r="2" fill="#FFFFFF" opacity="0.92" />
+      <circle cx="125.4" cy="109.6" r="2" fill="#FFFFFF" opacity="0.92" />
+      <path d="M90 130 Q100 139 110 130" stroke="#4A3A2C" stroke-width="2.6" stroke-linecap="round" />
+    </svg>
+    <span>56 px · 消息头像</span>
+  </div>
+</div>
+
+</body>
+</html>
