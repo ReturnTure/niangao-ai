@@ -52,3 +52,86 @@
 .thin-scrollbar::-webkit-scrollbar-track {
   background: transparent;
 }
+
+/*
+ * 年糕形象的动效：呼吸、眨眼、叶子轻摆。
+ *
+ * 放在 CSS 里而不是交给 JS 动画库，是因为要动的是 SVG 内部的几何元素：
+ * CSS 的 transform-box 能明确指定缩放原点（眼睛以自身中心压扁、叶子绕根部摆），
+ * 而用 JS 直接改 ry 这类 SVG 属性在各浏览器上表现并不一致，实测是没有生效。
+ *
+ * 整体慢、幅度小，符合"陪伴"的调性，不做活泼的弹跳。
+ */
+@keyframes ng-breathe {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-4px) scale(1.015);
+  }
+}
+
+/* 大部分时间睁着，只在循环末尾快速合一下 */
+@keyframes ng-blink {
+  0%,
+  88%,
+  100% {
+    transform: scaleY(1);
+  }
+  93% {
+    transform: scaleY(0.14);
+  }
+}
+
+@keyframes ng-shine {
+  0%,
+  88%,
+  100% {
+    opacity: 0.92;
+  }
+  93% {
+    opacity: 0;
+  }
+}
+
+@keyframes ng-leaf {
+  0%,
+  100% {
+    transform: rotate(-2deg);
+  }
+  50% {
+    transform: rotate(2deg);
+  }
+}
+
+.ng-alive {
+  display: inline-block;
+  line-height: 0;
+  animation: ng-breathe 5.2s ease-in-out infinite;
+}
+
+.ng-alive .ng-eye {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ng-blink 5.6s ease-in-out infinite;
+}
+
+.ng-alive .ng-shine {
+  animation: ng-shine 5.6s ease-in-out infinite;
+}
+
+.ng-alive .ng-leaf {
+  transform-box: view-box;
+  transform-origin: 100px 50px;
+  animation: ng-leaf 7.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ng-alive,
+  .ng-alive .ng-eye,
+  .ng-alive .ng-shine,
+  .ng-alive .ng-leaf {
+    animation: none;
+  }
+}

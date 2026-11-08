@@ -197,13 +197,9 @@ export default function ChatWindow({ chat, setChat }) {
                     animate={{ scale: [1, 1.08, 1], opacity: [0.4, 0.15, 0.4] }}
                     transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
                   />
-                  <motion.div
-                    className="relative"
-                    animate={{ y: [0, -7, 0] }}
-                    transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-                  >
+                  <div className="relative">
                     <NiangaoSprite size={104} />
-                  </motion.div>
+                  </div>
                 </div>
 
                 <motion.div
