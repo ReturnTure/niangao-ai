@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.routes import auth, chat
+from app.routes import auth, chat, report
 from app.db.database import create_indexes
 
 app = FastAPI(
@@ -31,6 +31,7 @@ app.add_middleware(
 
 app.include_router(auth.router)
 app.include_router(chat.router)
+app.include_router(report.router)
 
 # ---------------- STARTUP ---------------- #
 

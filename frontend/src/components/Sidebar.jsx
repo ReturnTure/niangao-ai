@@ -1,4 +1,4 @@
-import { MessageSquarePlus, LogOut, Sparkles } from "lucide-react";
+import { MessageSquarePlus, LogOut, Sparkles, BarChart3 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -79,6 +79,17 @@ export default function Sidebar({ setCurrentChat, closeSidebar }) {
           <MessageSquarePlus size={15} />
           新的对话
         </motion.button>
+
+        <button
+          onClick={() => {
+            closeSidebar?.();
+            navigate("/report");
+          }}
+          className="w-full flex items-center justify-center gap-2 mt-2 py-2.5 rounded-xl text-sm text-stone-300 bg-white/5 hover:bg-white/10 border border-white/10 transition"
+        >
+          <BarChart3 size={15} className="text-amber-300" />
+          情绪周报
+        </button>
       </div>
 
       <div className="flex-1 overflow-y-auto px-3 py-2">

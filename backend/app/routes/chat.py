@@ -11,6 +11,7 @@ from app.services.chatbot import (
     stream_ai_response,
     detect_crisis,
 )
+from app.services.emotion import analyze_emotion
 
 router = APIRouter(prefix="/chat", tags=["Chat"])
 
@@ -50,11 +51,18 @@ def load_history(email: str, limit: int = 8):
 
 
 def save_turn(email: str, message: str, response: str):
+    """落库一轮对话，并顺带记下这轮用户表达出的情绪。"""
+    emotion = analyze_emotion(message)
+
     try:
         chats.insert_one({
             "user": email,
             "message": message,
             "response": response,
+            "emotion": emotion["key"],
+            "emotion_label": emotion["label"],
+            "emotion_score": emotion["score"],
+            "emotion_keywords": emotion["keywords"],
             "created_at": datetime.utcnow(),
         })
     except Exception as e:
