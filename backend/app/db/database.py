@@ -70,6 +70,7 @@ users = db["users"]
 chats = db["chats"]
 blacklist = db["blacklist"]
 sessions = db["sessions"]
+assessments = db["assessments"]
 
 # ---------------- INDEXES ---------------- #
 
@@ -87,6 +88,9 @@ def create_indexes():
         )
 
         sessions.create_index("email", unique=True)
+
+        assessments.create_index("user")
+        assessments.create_index("created_at")
 
         print("✅ Indexes ensured")
 

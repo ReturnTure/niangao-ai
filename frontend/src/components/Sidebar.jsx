@@ -1,4 +1,4 @@
-import { MessageSquarePlus, LogOut, Sparkles, BarChart3 } from "lucide-react";
+import { MessageSquarePlus, LogOut, Sparkles, BarChart3, ClipboardList } from "lucide-react";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -87,8 +87,19 @@ export default function Sidebar({ setCurrentChat, closeSidebar }) {
           }}
           className="w-full flex items-center justify-center gap-2 mt-2 py-2.5 rounded-xl text-sm text-stone-600 bg-white/85 hover:bg-amber-50 hover:border-amber-300 border border-stone-300/70 transition"
         >
-          <BarChart3 size={15} className="text-amber-300" />
+          <BarChart3 size={15} className="text-amber-500" />
           情绪周报
+        </button>
+
+        <button
+          onClick={() => {
+            closeSidebar?.();
+            navigate("/assessment");
+          }}
+          className="w-full flex items-center justify-center gap-2 mt-2 py-2.5 rounded-xl text-sm text-stone-600 bg-white/85 hover:bg-amber-50 hover:border-amber-300 border border-stone-300/70 transition"
+        >
+          <ClipboardList size={15} className="text-amber-500" />
+          情绪自评
         </button>
       </div>
 
