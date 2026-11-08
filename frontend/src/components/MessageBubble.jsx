@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { motion } from "framer-motion";
 
 /* ---------------- UTIL ---------------- */
 
@@ -110,7 +111,7 @@ function StructuredView({ text = "" }) {
 
 function BotAvatar() {
   return (
-    <div className="w-7 h-7 rounded-full bg-gradient-to-br from-amber-300 to-orange-400 flex items-center justify-center shadow-md shrink-0 mt-0.5">
+    <div className="relative w-7 h-7 rounded-full bg-gradient-to-br from-amber-300 to-orange-400 flex items-center justify-center shadow-md shadow-amber-900/30 shrink-0 mt-0.5">
       <span className="text-stone-900 text-xs font-bold">年</span>
     </div>
   );
@@ -154,6 +155,32 @@ function CopyButton({ text }) {
   );
 }
 
+/* ---------------- EMOTION TAG ---------------- */
+
+const EMOTION_STYLE = {
+  积极: "text-amber-300 bg-amber-400/10 border-amber-400/25",
+  平静: "text-stone-400 bg-white/5 border-white/10",
+  焦虑: "text-sky-300 bg-sky-400/10 border-sky-400/25",
+  低落: "text-slate-400 bg-slate-400/10 border-slate-400/20",
+  愤怒: "text-rose-300 bg-rose-400/10 border-rose-400/25",
+};
+
+function EmotionTag({ label }) {
+  const style = EMOTION_STYLE[label] ?? "text-stone-400 bg-white/5 border-white/10";
+
+  return (
+    <motion.span
+      initial={{ opacity: 0, scale: 0.85 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.35, ease: "easeOut" }}
+      className={`px-1.5 py-0.5 rounded-full border text-[10px] ${style}`}
+      title="年糕从这句话里读到的情绪"
+    >
+      {label}
+    </motion.span>
+  );
+}
+
 /* ---------------- MAIN COMPONENT ---------------- */
 
 export default function MessageBubble({
@@ -162,6 +189,7 @@ export default function MessageBubble({
   timestamp,
   isError,
   isStreaming: propStreaming,
+  emotion,
 }) {
   const isBot = role === "bot";
 
@@ -173,7 +201,10 @@ export default function MessageBubble({
   const type = detectType(displayText);
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, x: isBot ? -10 : 10, y: 10 }}
+      animate={{ opacity: 1, x: 0, y: 0 }}
+      transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
       className={`flex gap-2 group ${isBot ? "justify-start" : "justify-end"} mb-3`}
     >
       {/* Bot Avatar */}
@@ -221,6 +252,8 @@ export default function MessageBubble({
             isBot ? "" : "flex-row-reverse"
           }`}
         >
+          {emotion && !isError && <EmotionTag label={emotion} />}
+
           {timestamp && <span>{formatTime(timestamp)}</span>}
 
           {displayText && !isError && !isStreaming && (
@@ -232,6 +265,6 @@ export default function MessageBubble({
       </div>
 
       {!isBot && <UserAvatar />}
-    </div>
+    </motion.div>
   );
 }

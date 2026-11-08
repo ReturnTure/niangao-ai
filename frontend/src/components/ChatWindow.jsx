@@ -99,8 +99,19 @@ export default function ChatWindow({ chat, setChat }) {
               );
             }
 
-            if (payload.done && payload.crisis) {
-              setShowCrisis(true);
+            if (payload.done) {
+              if (payload.crisis) setShowCrisis(true);
+
+              // 把本轮情绪挂到用户那条消息上，气泡下方会显示一个小标签
+              if (payload.emotion) {
+                setChat((prev) =>
+                  prev.map((msg) =>
+                    msg.id === messageId + "-user"
+                      ? { ...msg, emotion: payload.emotion }
+                      : msg,
+                  ),
+                );
+              }
             }
           }
         }
@@ -160,27 +171,47 @@ export default function ChatWindow({ chat, setChat }) {
   const isEmpty = chat.length === 0;
 
   return (
-    <div className="flex flex-col flex-1 h-screen bg-gradient-to-br from-stone-950 via-stone-900 to-stone-800">
+    <div className="flex flex-col flex-1 h-screen bg-transparent">
       {/* Chat Area */}
-      <div className="flex-1 overflow-y-auto px-4 py-6">
+      <div className="flex-1 overflow-y-auto thin-scrollbar px-4 py-6">
         <div className="max-w-3xl mx-auto space-y-5">
           {/* Empty State */}
           <AnimatePresence>
             {isEmpty && (
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="flex flex-col items-center justify-center h-[50vh] gap-5 text-center"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="flex flex-col items-center justify-center h-[52vh] gap-6 text-center"
               >
+                {/* 年糕：呼吸光晕 + 轻微浮动 */}
                 <div className="relative">
-                  <div className="absolute inset-0 bg-amber-400/25 blur-2xl rounded-full" />
-                  <div className="relative w-16 h-16 bg-gradient-to-br from-amber-300 to-orange-400 rounded-2xl flex items-center justify-center shadow-lg">
+                  <motion.div
+                    className="absolute inset-0 rounded-full bg-amber-400/25 blur-3xl"
+                    animate={{ scale: [1, 1.3, 1], opacity: [0.35, 0.7, 0.35] }}
+                    transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                  />
+                  <motion.div
+                    className="absolute -inset-4 rounded-full border border-amber-400/10"
+                    animate={{ scale: [1, 1.08, 1], opacity: [0.4, 0.15, 0.4] }}
+                    transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                  />
+                  <motion.div
+                    className="relative w-16 h-16 bg-gradient-to-br from-amber-300 to-orange-400 rounded-2xl flex items-center justify-center shadow-lg shadow-amber-900/40"
+                    animate={{ y: [0, -7, 0] }}
+                    transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+                  >
                     <span className="text-stone-900 font-bold text-2xl">年</span>
-                  </div>
+                  </motion.div>
                 </div>
 
-                <div className="space-y-2">
-                  <p className="text-stone-200 text-base font-medium">
+                <motion.div
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.15, duration: 0.4 }}
+                  className="space-y-2"
+                >
+                  <p className="text-stone-100 text-lg font-medium tracking-wide">
                     你好，我是年糕
                   </p>
                   <p className="text-stone-400 text-sm leading-relaxed max-w-sm">
@@ -188,18 +219,23 @@ export default function ChatWindow({ chat, setChat }) {
                     <br />
                     想说什么都可以，我在这儿听着。
                   </p>
-                </div>
+                </motion.div>
 
                 {/* 快捷开始 */}
-                <div className="flex flex-wrap justify-center gap-2 max-w-md pt-2">
-                  {QUICK_STARTS.map((q) => (
-                    <button
+                <div className="flex flex-wrap justify-center gap-2 max-w-md pt-1">
+                  {QUICK_STARTS.map((q, i) => (
+                    <motion.button
                       key={q}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.3 + i * 0.08, duration: 0.35 }}
+                      whileHover={{ y: -2, scale: 1.03 }}
+                      whileTap={{ scale: 0.97 }}
                       onClick={() => sendMessage(q)}
-                      className="px-3 py-1.5 rounded-full text-xs text-stone-300 bg-white/5 border border-white/10 hover:bg-amber-500/15 hover:border-amber-400/40 hover:text-amber-200 transition"
+                      className="px-3.5 py-1.5 rounded-full text-xs text-stone-300 bg-white/5 border border-white/10 hover:bg-amber-500/15 hover:border-amber-400/40 hover:text-amber-200 hover:shadow-lg hover:shadow-amber-900/20 transition-colors"
                     >
                       {q}
-                    </button>
+                    </motion.button>
                   ))}
                 </div>
               </motion.div>
@@ -214,6 +250,7 @@ export default function ChatWindow({ chat, setChat }) {
               text={msg.text}
               isError={msg.isError}
               isStreaming={msg.isStreaming}
+              emotion={msg.emotion}
             />
           ))}
 
@@ -262,36 +299,43 @@ export default function ChatWindow({ chat, setChat }) {
       </AnimatePresence>
 
       {/* Input Area */}
-      <div className="sticky bottom-0 border-t border-white/10 bg-stone-900/80 backdrop-blur-xl px-4 py-3">
+      <div className="relative sticky bottom-0 border-t border-white/10 bg-stone-950/70 backdrop-blur-xl px-4 py-3">
+        {/* 顶部一条暖色细线，和上方内容做视觉分隔 */}
+        <div className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-amber-400/30 to-transparent" />
+
         <div className="max-w-3xl mx-auto flex items-end gap-3">
           <label htmlFor="chat-textarea" className="sr-only">
             想对年糕说的话
           </label>
-          <textarea
-            id="chat-textarea"
-            name="message"
-            ref={textareaRef}
-            value={input}
-            disabled={loading}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-              }
-            }}
-            placeholder="想和年糕说点什么……"
-            rows={1}
-            className="
-            flex-1 resize-none px-4 py-3 rounded-xl
-            bg-black/40 border border-stone-700
-            text-white text-sm
-            focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400
-            placeholder-stone-500
-            max-h-[160px] overflow-y-auto
-            disabled:opacity-60
-          "
-          />
+          <div className="relative flex-1 group">
+            <textarea
+              id="chat-textarea"
+              name="message"
+              ref={textareaRef}
+              value={input}
+              disabled={loading}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  sendMessage();
+                }
+              }}
+              placeholder="想和年糕说点什么……"
+              rows={1}
+              className="
+              w-full resize-none px-4 py-3 rounded-xl
+              bg-black/40 border border-stone-700
+              text-white text-sm
+              focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400/60
+              focus:shadow-[0_0_24px_-8px_rgba(251,191,36,0.5)]
+              placeholder-stone-500
+              max-h-[160px] overflow-y-auto thin-scrollbar
+              disabled:opacity-60
+              transition-shadow
+            "
+            />
+          </div>
 
           {loading ? (
             <button

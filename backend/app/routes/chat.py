@@ -137,9 +137,13 @@ async def chat_stream(
             ) + "\n\n"
 
         finally:
-            # ✅ 明确结束帧，附带危机标记
+            # ✅ 明确结束帧，附带危机标记与本轮情绪，前端据此显示情绪标签
             yield "data: " + json.dumps(
-                {"done": True, "crisis": crisis},
+                {
+                    "done": True,
+                    "crisis": crisis,
+                    "emotion": analyze_emotion(req.message)["label"],
+                },
                 ensure_ascii=False,
             ) + "\n\n"
 
