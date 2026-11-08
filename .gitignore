@@ -1,0 +1,30 @@
+# Node / Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+
+# Python / Backend
+backend/venv/
+**/__pycache__/
+*.pyc
+backend/.env
+
+# Editor local history (VS Code)
+frontend/.history/
+
+# General
+.env
+*.log
+.DS_Store
+Thumbs.db
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
