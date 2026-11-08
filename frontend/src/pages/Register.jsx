@@ -88,23 +88,23 @@ export default function Register({ switchToLogin }) {
 
   return (
     <div>
-      <h2 className="text-2xl font-semibold text-stone-100 text-center mb-2">
+      <h2 className="text-2xl font-semibold text-stone-800 text-center mb-2">
         创建账号
       </h2>
 
-      <p className="text-stone-400 text-sm text-center mb-6">
+      <p className="text-stone-500 text-sm text-center mb-6">
         从今天开始，慢慢来
       </p>
 
       {success && (
-        <div className="mb-4 px-3 py-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
-          <p className="text-emerald-400 text-xs text-center">{success}</p>
+        <div className="mb-4 px-3 py-2 rounded-lg bg-emerald-50 border border-emerald-300/80">
+          <p className="text-emerald-700 text-xs text-center">{success}</p>
         </div>
       )}
 
       {error && (
-        <div className="mb-4 px-3 py-2 rounded-lg bg-red-500/10 border border-red-500/20">
-          <p className="text-red-400 text-xs text-center">{error}</p>
+        <div className="mb-4 px-3 py-2 rounded-lg bg-red-50 border border-red-300/80">
+          <p className="text-red-600 text-xs text-center">{error}</p>
         </div>
       )}
 
@@ -121,13 +121,13 @@ export default function Register({ switchToLogin }) {
           onChange={(e) => setData({ ...data, email: e.target.value })}
           onKeyDown={onKeyDown}
           placeholder=" "
-          className="peer w-full px-4 pt-5 pb-2 rounded-xl bg-white/5 border border-white/10 text-white
+          className="peer w-full px-4 pt-5 pb-2 rounded-xl bg-white/90 border border-stone-300/80 text-stone-800
           focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-400/30 transition"
         />
         <span
-          className="absolute left-4 top-2 text-xs text-stone-400
+          className="absolute left-4 top-2 text-xs text-stone-500
           peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm
-          peer-focus:top-2 peer-focus:text-xs peer-focus:text-amber-300"
+          peer-focus:top-2 peer-focus:text-xs peer-focus:text-amber-700"
         >
           邮箱
         </span>
@@ -146,13 +146,13 @@ export default function Register({ switchToLogin }) {
           onChange={(e) => setData({ ...data, password: e.target.value })}
           onKeyDown={onKeyDown}
           placeholder=" "
-          className="peer w-full px-4 pt-5 pb-2 pr-12 rounded-xl bg-white/5 border border-white/10 text-white
+          className="peer w-full px-4 pt-5 pb-2 pr-12 rounded-xl bg-white/90 border border-stone-300/80 text-stone-800
           focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-400/30 transition"
         />
         <span
-          className="absolute left-4 top-2 text-xs text-stone-400
+          className="absolute left-4 top-2 text-xs text-stone-500
           peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm
-          peer-focus:top-2 peer-focus:text-xs peer-focus:text-amber-300"
+          peer-focus:top-2 peer-focus:text-xs peer-focus:text-amber-700"
         >
           密码
         </span>
@@ -160,7 +160,7 @@ export default function Register({ switchToLogin }) {
         <button
           type="button"
           onClick={() => setShowPassword((s) => !s)}
-          className="absolute right-3 top-3 text-stone-400 hover:text-white text-sm"
+          className="absolute right-3 top-3 text-stone-500 hover:text-stone-800 text-sm"
         >
           {showPassword ? "隐藏" : "显示"}
         </button>
@@ -182,11 +182,11 @@ export default function Register({ switchToLogin }) {
         {loading ? "创建中……" : "注册"}
       </motion.button>
 
-      <p className="text-stone-400 text-sm text-center mt-6">
+      <p className="text-stone-500 text-sm text-center mt-6">
         已经有账号？
         <span
           onClick={switchToLogin}
-          className="text-amber-400 cursor-pointer hover:underline ml-1"
+          className="text-amber-700 cursor-pointer hover:underline ml-1"
         >
           去登录
         </span>

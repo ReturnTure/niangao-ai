@@ -60,8 +60,8 @@ export default function Sidebar({ setCurrentChat, closeSidebar }) {
   };
 
   return (
-    <div className="w-full h-full flex flex-col text-white">
-      <div className="px-4 py-5 border-b border-white/10 flex items-center gap-2.5">
+    <div className="w-full h-full flex flex-col text-stone-800">
+      <div className="px-4 py-5 border-b border-stone-200/70 flex items-center gap-2.5">
         <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-amber-300 to-orange-400 flex items-center justify-center">
           <Sparkles size={13} className="text-stone-900" />
         </div>
@@ -85,7 +85,7 @@ export default function Sidebar({ setCurrentChat, closeSidebar }) {
             closeSidebar?.();
             navigate("/report");
           }}
-          className="w-full flex items-center justify-center gap-2 mt-2 py-2.5 rounded-xl text-sm text-stone-300 bg-white/5 hover:bg-white/10 border border-white/10 transition"
+          className="w-full flex items-center justify-center gap-2 mt-2 py-2.5 rounded-xl text-sm text-stone-600 bg-white/85 hover:bg-amber-50 hover:border-amber-300 border border-stone-300/70 transition"
         >
           <BarChart3 size={15} className="text-amber-300" />
           情绪周报
@@ -102,8 +102,8 @@ export default function Sidebar({ setCurrentChat, closeSidebar }) {
               onClick={() => handleSelectChat(c)}
               className={`w-full text-left px-3 py-2 rounded-lg ${
                 activeId === c.id
-                  ? "bg-amber-500/20 text-amber-100"
-                  : "hover:bg-white/5 text-stone-300"
+                  ? "bg-amber-100/90 text-amber-900 border border-amber-300/70"
+                  : "hover:bg-white/80 text-stone-600 border border-transparent"
               }`}
             >
               <p className="text-sm truncate">{c.title}</p>
@@ -112,15 +112,15 @@ export default function Sidebar({ setCurrentChat, closeSidebar }) {
         )}
       </div>
 
-      <div className="px-3 py-4 border-t border-white/10">
-        <p className="text-[10px] text-stone-600 text-center mb-3 leading-relaxed">
+      <div className="px-3 py-4 border-t border-stone-200/70">
+        <p className="text-[10px] text-stone-400 text-center mb-3 leading-relaxed">
           年糕是 AI 陪伴工具
           <br />
           不能替代专业心理治疗
         </p>
         <button
           onClick={handleLogout}
-          className="w-full flex items-center justify-center gap-2 py-2 text-sm text-stone-400 hover:text-red-400 transition"
+          className="w-full flex items-center justify-center gap-2 py-2 text-sm text-stone-500 hover:text-red-500 transition"
         >
           <LogOut size={14} />
           退出登录

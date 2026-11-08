@@ -41,11 +41,11 @@ export default function ChatLayout() {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="relative flex h-screen bg-stone-950 text-white overflow-hidden"
+      className="relative flex h-screen text-stone-800 overflow-hidden"
     >
-      <Backdrop variant="chat" />
+      <Backdrop />
       {/* 移动端顶栏 */}
-      <div className="md:hidden fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-4 py-3 bg-stone-950 border-b border-white/10">
+      <div className="md:hidden fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-4 py-3 bg-white/80 backdrop-blur-lg border-b border-stone-200/70">
         <button onClick={() => setSidebarOpen(true)} aria-label="打开菜单">
           <Menu />
         </button>
@@ -65,7 +65,7 @@ export default function ChatLayout() {
         className={`
           fixed md:static z-40 md:z-20
           h-full w-64
-          bg-stone-950/95 backdrop-blur-xl border-r border-white/10
+          bg-white/45 backdrop-blur-2xl border-r border-stone-200/60
           transform transition-transform duration-300
           ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
           md:translate-x-0

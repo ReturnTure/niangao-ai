@@ -14,11 +14,11 @@ import Backdrop from "../components/Backdrop";
 echarts.use([LineChart, GridComponent, TooltipComponent, MarkLineComponent, CanvasRenderer]);
 
 const LABEL_COLOR = {
-  积极: "text-amber-300",
-  平静: "text-stone-300",
-  焦虑: "text-sky-300",
-  低落: "text-slate-400",
-  愤怒: "text-rose-300",
+  积极: "text-amber-700",
+  平静: "text-stone-600",
+  焦虑: "text-sky-700",
+  低落: "text-slate-600",
+  愤怒: "text-rose-600",
 };
 
 const BAR_COLOR = {
@@ -62,10 +62,10 @@ function ScoreCard({ title, value, unit, hint, delay = 0 }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay, duration: 0.45, ease: "easeOut" }}
       whileHover={{ y: -2 }}
-      className="rounded-2xl bg-white/[0.07] border border-white/[0.14] px-4 py-4 hover:bg-white/[0.08] hover:border-white/20 transition-colors"
+      className="rounded-2xl bg-white/85 border border-stone-200/80 shadow-sm shadow-stone-200/50 px-4 py-4 hover:bg-white hover:border-amber-300/70 transition-colors"
     >
-      <p className="text-[11px] text-stone-400 mb-1.5">{title}</p>
-      <p className="text-2xl font-semibold text-stone-100">
+      <p className="text-[11px] text-stone-500 mb-1.5">{title}</p>
+      <p className="text-2xl font-semibold text-stone-800">
         {hasValue ? <CountUp value={value} /> : "—"}
         {unit && hasValue && (
           <span className="text-xs font-normal text-stone-400 ml-1">{unit}</span>
@@ -113,9 +113,9 @@ export default function ReportPage() {
       grid: { left: 8, right: 16, top: 24, bottom: 24, containLabel: true },
       tooltip: {
         trigger: "axis",
-        backgroundColor: "rgba(28,25,23,0.92)",
-        borderColor: "rgba(255,255,255,0.1)",
-        textStyle: { color: "#e7e5e4", fontSize: 12 },
+        backgroundColor: "rgba(255,253,247,0.97)",
+        borderColor: "rgba(168,162,158,0.35)",
+        textStyle: { color: "#57534e", fontSize: 12 },
         formatter: (params) => {
           const i = params[0].dataIndex;
           const s = scores[i];
@@ -127,9 +127,9 @@ export default function ReportPage() {
         type: "category",
         data: dates,
         boundaryGap: false,
-        axisLine: { lineStyle: { color: "rgba(255,255,255,0.12)" } },
+        axisLine: { lineStyle: { color: "rgba(120,113,108,0.22)" } },
         axisTick: { show: false },
-        axisLabel: { color: "#a8a29e", fontSize: 11 },
+        axisLabel: { color: "#78716c", fontSize: 11 },
       },
       yAxis: {
         type: "value",
@@ -138,8 +138,8 @@ export default function ReportPage() {
         interval: 25,
         axisLine: { show: false },
         axisTick: { show: false },
-        splitLine: { lineStyle: { color: "rgba(255,255,255,0.06)" } },
-        axisLabel: { color: "#78716c", fontSize: 11 },
+        splitLine: { lineStyle: { color: "rgba(120,113,108,0.12)" } },
+        axisLabel: { color: "#a8a29e", fontSize: 11 },
       },
       series: [
         {
@@ -149,21 +149,21 @@ export default function ReportPage() {
           connectNulls: true,
           symbol: "circle",
           symbolSize: 7,
-          lineStyle: { width: 2.5, color: "#fbbf24" },
-          itemStyle: { color: "#fbbf24", borderColor: "#fde68a", borderWidth: 2 },
+          lineStyle: { width: 2.5, color: "#f59e0b" },
+          itemStyle: { color: "#f59e0b", borderColor: "#fcd34d", borderWidth: 2 },
           areaStyle: {
             color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-              { offset: 0, color: "rgba(251,191,36,0.28)" },
-              { offset: 1, color: "rgba(251,191,36,0.02)" },
+              { offset: 0, color: "rgba(245,158,11,0.32)" },
+              { offset: 1, color: "rgba(245,158,11,0.04)" },
             ]),
           },
           markLine: {
             silent: true,
             symbol: "none",
-            lineStyle: { color: "rgba(168,162,158,0.35)", type: "dashed", width: 1 },
+            lineStyle: { color: "rgba(120,113,108,0.45)", type: "dashed", width: 1 },
             label: {
               formatter: "平静线",
-              color: "#a8a29e",
+              color: "#78716c",
               fontSize: 10,
               position: "insideEndTop",
             },
@@ -189,21 +189,21 @@ export default function ReportPage() {
     summary?.trend === "up" ? TrendingUp : summary?.trend === "down" ? TrendingDown : Minus;
   const trendColor =
     summary?.trend === "up"
-      ? "text-amber-300"
+      ? "text-amber-700"
       : summary?.trend === "down"
       ? "text-rose-300"
       : "text-stone-400";
 
   return (
-    <div className="relative min-h-screen bg-stone-950 text-stone-100 overflow-hidden">
-      <Backdrop variant="report" />
+    <div className="relative min-h-screen text-stone-800 overflow-hidden">
+      <Backdrop />
 
       <div className="relative z-10 max-w-3xl mx-auto px-5 py-6 pb-14">
         {/* 顶部 */}
         <div className="flex items-center justify-between mb-6">
           <button
             onClick={() => navigate("/chat")}
-            className="flex items-center gap-1.5 text-sm text-stone-400 hover:text-amber-300 transition"
+            className="flex items-center gap-1.5 text-sm text-stone-600 hover:text-amber-700 transition"
           >
             <ArrowLeft size={16} />
             回到对话
@@ -211,7 +211,7 @@ export default function ReportPage() {
 
           <button
             onClick={load}
-            className="p-2 rounded-lg text-stone-500 hover:text-amber-300 hover:bg-white/5 transition"
+            className="p-2 rounded-lg text-stone-400 hover:text-amber-700 hover:bg-white/60 transition"
             aria-label="刷新"
           >
             <RefreshCw size={15} className={loading ? "animate-spin" : ""} />
@@ -234,7 +234,7 @@ export default function ReportPage() {
           {loading && <p className="text-sm text-stone-500">正在生成周报…</p>}
 
           {error && (
-            <div className="rounded-xl bg-rose-500/10 border border-rose-500/20 px-4 py-3 text-sm text-rose-200">
+            <div className="rounded-xl bg-rose-50 border border-rose-300/70 px-4 py-3 text-sm text-rose-700">
               {error}
             </div>
           )}
@@ -256,12 +256,12 @@ export default function ReportPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.19, duration: 0.45, ease: "easeOut" }}
                   whileHover={{ y: -2 }}
-                  className="rounded-2xl bg-white/[0.07] border border-white/[0.14] px-4 py-4 hover:bg-white/[0.08] hover:border-white/20 transition-colors"
+                  className="rounded-2xl bg-white/85 border border-stone-200/80 shadow-sm shadow-stone-200/50 px-4 py-4 hover:bg-white hover:border-amber-300/70 transition-colors"
                 >
-                  <p className="text-[11px] text-stone-400 mb-1.5">主要情绪</p>
+                  <p className="text-[11px] text-stone-500 mb-1.5">主要情绪</p>
                   <p
                     className={`text-2xl font-semibold ${
-                      summary.dominant ? LABEL_COLOR[summary.dominant] : "text-stone-100"
+                      summary.dominant ? LABEL_COLOR[summary.dominant] : "text-stone-800"
                     }`}
                   >
                     {summary.dominant ?? "—"}
@@ -278,9 +278,9 @@ export default function ReportPage() {
                 initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.26, duration: 0.5, ease: "easeOut" }}
-                className="rounded-2xl bg-white/[0.07] border border-white/[0.14] p-4 mb-5"
+                className="rounded-2xl bg-white/85 border border-stone-200/80 shadow-sm shadow-stone-200/50 p-4 mb-5"
               >
-                <p className="text-xs text-stone-400 mb-2 px-1">情绪走势</p>
+                <p className="text-xs text-stone-500 mb-2 px-1">情绪走势</p>
                 <div ref={chartRef} style={{ width: "100%", height: 280 }} />
               </motion.div>
 
@@ -290,18 +290,18 @@ export default function ReportPage() {
                   initial={{ opacity: 0, y: 14 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.34, duration: 0.5, ease: "easeOut" }}
-                  className="rounded-2xl bg-white/[0.07] border border-white/[0.14] p-4 mb-5"
+                  className="rounded-2xl bg-white/85 border border-stone-200/80 shadow-sm shadow-stone-200/50 p-4 mb-5"
                 >
-                  <p className="text-xs text-stone-400 mb-3 px-1">情绪分布</p>
+                  <p className="text-xs text-stone-500 mb-3 px-1">情绪分布</p>
                   <div className="space-y-2.5">
                     {data.distribution.map((item, i) => {
                       const percent = Math.round((item.count / total) * 100);
                       return (
                         <div key={item.label} className="flex items-center gap-3">
-                          <span className="text-xs w-10 shrink-0 text-stone-300">
+                          <span className="text-xs w-10 shrink-0 text-stone-600">
                             {item.label}
                           </span>
-                          <div className="flex-1 h-1.5 rounded-full bg-white/10 overflow-hidden">
+                          <div className="flex-1 h-1.5 rounded-full bg-stone-200 overflow-hidden">
                             <motion.div
                               initial={{ width: 0 }}
                               animate={{ width: `${percent}%` }}
@@ -330,12 +330,12 @@ export default function ReportPage() {
                 initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.42, duration: 0.5, ease: "easeOut" }}
-                className="relative rounded-2xl bg-amber-500/10 border border-amber-500/20 p-4 mb-5 overflow-hidden"
+                className="relative rounded-2xl bg-amber-50/95 border border-amber-300/70 shadow-sm shadow-amber-200/50 p-4 mb-5 overflow-hidden"
               >
                 {/* 左上角一层柔光，让这块"结论"有人味儿一点 */}
-                <div className="absolute -top-12 -left-12 w-32 h-32 rounded-full bg-amber-400/10 blur-2xl" />
-                <p className="relative text-xs text-amber-200/80 mb-2">年糕的观察</p>
-                <p className="relative text-sm leading-relaxed text-stone-200">
+                <div className="absolute -top-12 -left-12 w-32 h-32 rounded-full bg-amber-300/30 blur-2xl" />
+                <p className="relative text-xs text-amber-700 mb-2">年糕的观察</p>
+                <p className="relative text-sm leading-relaxed text-stone-700">
                   {data.insight}
                 </p>
               </motion.div>
@@ -352,7 +352,7 @@ export default function ReportPage() {
             </>
           )}
 
-          <p className="text-[11px] text-stone-600 leading-relaxed mt-6">
+          <p className="text-[11px] text-stone-400 leading-relaxed mt-6">
             情绪分由关键词统计得出，用于观察自己的状态起伏，不构成任何心理诊断或医疗建议。
             <br />
             如果你正经历持续的困扰，请联系专业心理工作者，或拨打希望 24 热线 400-161-9995。

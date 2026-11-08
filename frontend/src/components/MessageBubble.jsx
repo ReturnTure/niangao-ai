@@ -70,13 +70,13 @@ function StructuredView({ text = "" }) {
   return (
     <div className="space-y-2 text-sm">
       {sections["title"] && (
-        <h3 className="text-base font-semibold text-white">
+        <h3 className="text-base font-semibold text-stone-800">
           {sections["title"].join(" ")}
         </h3>
       )}
 
       {(sections["overview"] || sections["definition"]) && (
-        <p className="text-stone-300 leading-relaxed">
+        <p className="text-stone-600 leading-relaxed">
           {(sections["overview"] || sections["definition"]).join(" ")}
         </p>
       )}
@@ -84,7 +84,7 @@ function StructuredView({ text = "" }) {
       {["key points", "key characteristics", "core functions", "details"].map(
         (key) =>
           sections[key] && (
-            <ul key={key} className="list-disc ml-5 space-y-1 text-stone-200">
+            <ul key={key} className="list-disc ml-5 space-y-1 text-stone-700">
               {sections[key].map((l, i) => (
                 <li key={i}>{l.replace(/^•\s?/, "")}</li>
               ))}
@@ -93,13 +93,13 @@ function StructuredView({ text = "" }) {
       )}
 
       {sections["example"] && (
-        <div className="bg-black/30 border border-white/10 rounded-lg p-2 text-xs font-mono text-stone-300 whitespace-pre-wrap">
+        <div className="bg-stone-100 border border-stone-200 rounded-lg p-2 text-xs font-mono text-stone-600 whitespace-pre-wrap">
           {sections["example"].join("\n")}
         </div>
       )}
 
       {sections["summary"] && (
-        <p className="text-stone-400 italic text-xs border-t border-white/10 pt-2">
+        <p className="text-stone-500 italic text-xs border-t border-stone-200 pt-2">
           {sections["summary"].join(" ")}
         </p>
       )}
@@ -119,8 +119,8 @@ function BotAvatar() {
 
 function UserAvatar() {
   return (
-    <div className="w-7 h-7 rounded-full bg-white/10 border border-white/15 flex items-center justify-center shrink-0 mt-0.5">
-      <span className="text-stone-300 text-xs">我</span>
+    <div className="w-7 h-7 rounded-full bg-white/85 border border-stone-300/80 flex items-center justify-center shrink-0 mt-0.5">
+      <span className="text-stone-500 text-xs">我</span>
     </div>
   );
 }
@@ -147,7 +147,7 @@ function CopyButton({ text }) {
       className={`p-1 rounded transition ${
         copied
           ? "text-emerald-400"
-          : "text-stone-500 hover:text-stone-300 hover:bg-white/5"
+          : "text-stone-400 hover:text-stone-600 hover:bg-stone-100"
       }`}
     >
       {copied ? "✓" : "⧉"}
@@ -158,15 +158,15 @@ function CopyButton({ text }) {
 /* ---------------- EMOTION TAG ---------------- */
 
 const EMOTION_STYLE = {
-  积极: "text-amber-300 bg-amber-400/10 border-amber-400/25",
-  平静: "text-stone-400 bg-white/5 border-white/10",
-  焦虑: "text-sky-300 bg-sky-400/10 border-sky-400/25",
-  低落: "text-slate-400 bg-slate-400/10 border-slate-400/20",
-  愤怒: "text-rose-300 bg-rose-400/10 border-rose-400/25",
+  积极: "text-amber-700 bg-amber-100/90 border-amber-300",
+  平静: "text-stone-500 bg-stone-100/90 border-stone-300",
+  焦虑: "text-sky-700 bg-sky-100/90 border-sky-300",
+  低落: "text-slate-600 bg-slate-100/90 border-slate-300",
+  愤怒: "text-rose-700 bg-rose-100/90 border-rose-300",
 };
 
 function EmotionTag({ label }) {
-  const style = EMOTION_STYLE[label] ?? "text-stone-400 bg-white/5 border-white/10";
+  const style = EMOTION_STYLE[label] ?? "text-stone-500 bg-stone-100/90 border-stone-300";
 
   return (
     <motion.span
@@ -221,9 +221,9 @@ export default function MessageBubble({
             ${
               isBot
                 ? isError
-                  ? "bg-red-500/10 border border-red-500/20 text-red-300"
-                  : "bg-white/10 border border-white/10 text-stone-100"
-                : "bg-gradient-to-br from-amber-500 to-orange-500 text-white"
+                  ? "bg-red-50 border border-red-300/70 text-red-600"
+                  : "bg-white/90 border border-stone-200/80 text-stone-800 shadow-sm shadow-stone-200/60"
+                : "bg-gradient-to-br from-amber-500 to-orange-500 text-white shadow-sm shadow-orange-300/50"
             }
           `}
         >

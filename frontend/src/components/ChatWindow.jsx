@@ -211,10 +211,10 @@ export default function ChatWindow({ chat, setChat }) {
                   transition={{ delay: 0.15, duration: 0.4 }}
                   className="space-y-2"
                 >
-                  <p className="text-stone-100 text-lg font-medium tracking-wide">
+                  <p className="text-stone-800 text-lg font-medium tracking-wide">
                     你好，我是年糕
                   </p>
-                  <p className="text-stone-400 text-sm leading-relaxed max-w-sm">
+                  <p className="text-stone-500 text-sm leading-relaxed max-w-sm">
                     我不评判，也不催你振作。
                     <br />
                     想说什么都可以，我在这儿听着。
@@ -232,7 +232,7 @@ export default function ChatWindow({ chat, setChat }) {
                       whileHover={{ y: -2, scale: 1.03 }}
                       whileTap={{ scale: 0.97 }}
                       onClick={() => sendMessage(q)}
-                      className="px-3.5 py-1.5 rounded-full text-xs text-stone-300 bg-white/5 border border-white/10 hover:bg-amber-500/15 hover:border-amber-400/40 hover:text-amber-200 hover:shadow-lg hover:shadow-amber-900/20 transition-colors"
+                      className="px-3.5 py-1.5 rounded-full text-xs text-stone-600 bg-white/80 border border-stone-300/70 shadow-sm shadow-stone-200/50 hover:bg-amber-50 hover:border-amber-400/70 hover:text-amber-800 hover:shadow-md transition-colors"
                     >
                       {q}
                     </motion.button>
@@ -271,10 +271,10 @@ export default function ChatWindow({ chat, setChat }) {
             exit={{ opacity: 0, y: 10 }}
             className="px-4"
           >
-            <div className="max-w-3xl mx-auto mb-2 px-4 py-3 rounded-xl bg-red-500/10 border border-red-400/30">
+            <div className="max-w-3xl mx-auto mb-2 px-4 py-3 rounded-xl bg-red-50/90 border border-red-300/70 backdrop-blur-sm">
               <div className="flex items-start gap-2">
-                <span className="text-red-300 text-sm">⚠️</span>
-                <div className="flex-1 text-xs text-red-200/90 leading-relaxed">
+                <span className="text-red-500 text-sm">⚠️</span>
+                <div className="flex-1 text-xs text-red-700 leading-relaxed">
                   <p className="font-medium mb-1">
                     如果你现在很难受，请让专业的人陪你
                   </p>
@@ -282,13 +282,13 @@ export default function ChatWindow({ chat, setChat }) {
                     全国心理援助热线 <span className="font-semibold">400-161-9995</span>（24 小时）
                     　·　紧急情况请拨 <span className="font-semibold">110</span>
                   </p>
-                  <p className="mt-1 text-red-200/60">
+                  <p className="mt-1 text-red-600/70">
                     也可以联系身边信任的人，或去最近医院的急诊。年糕会一直在这里，但年糕不是医生。
                   </p>
                 </div>
                 <button
                   onClick={() => setShowCrisis(false)}
-                  className="text-red-300/60 hover:text-red-200 text-xs"
+                  className="text-red-400 hover:text-red-600 text-xs"
                 >
                   ✕
                 </button>
@@ -299,9 +299,9 @@ export default function ChatWindow({ chat, setChat }) {
       </AnimatePresence>
 
       {/* Input Area */}
-      <div className="relative sticky bottom-0 border-t border-white/10 bg-stone-950/70 backdrop-blur-xl px-4 py-3">
+      <div className="relative sticky bottom-0 border-t border-stone-200/70 bg-white/55 backdrop-blur-2xl px-4 py-3">
         {/* 顶部一条暖色细线，和上方内容做视觉分隔 */}
-        <div className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-amber-400/30 to-transparent" />
+        <div className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-amber-400/50 to-transparent" />
 
         <div className="max-w-3xl mx-auto flex items-end gap-3">
           <label htmlFor="chat-textarea" className="sr-only">
@@ -325,11 +325,11 @@ export default function ChatWindow({ chat, setChat }) {
               rows={1}
               className="
               w-full resize-none px-4 py-3 rounded-xl
-              bg-black/40 border border-stone-700
-              text-white text-sm
+              bg-white/90 border border-stone-300/80
+              text-stone-800 text-sm
               focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400/60
-              focus:shadow-[0_0_24px_-8px_rgba(251,191,36,0.5)]
-              placeholder-stone-500
+              focus:shadow-[0_0_24px_-8px_rgba(217,119,6,0.45)]
+              placeholder-stone-400
               max-h-[160px] overflow-y-auto thin-scrollbar
               disabled:opacity-60
               transition-shadow
@@ -341,7 +341,7 @@ export default function ChatWindow({ chat, setChat }) {
             <button
               onClick={stopGeneration}
               title="停止"
-              className="w-11 h-11 flex items-center justify-center rounded-xl bg-red-500 hover:bg-red-600 transition"
+              className="w-11 h-11 flex items-center justify-center rounded-xl bg-red-500 hover:bg-red-600 text-white transition"
             >
               ■
             </button>
@@ -353,7 +353,7 @@ export default function ChatWindow({ chat, setChat }) {
               className="
               w-11 h-11 flex items-center justify-center rounded-xl
               bg-gradient-to-br from-amber-500 to-orange-500
-              text-white
+              text-white shadow-md shadow-orange-300/50
               hover:scale-105 transition
               disabled:opacity-40 disabled:hover:scale-100
             "

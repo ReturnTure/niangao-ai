@@ -9,11 +9,11 @@ export default function TypingIndicator() {
       </div>
 
       {/* Bubble */}
-      <div className="bg-white/10 backdrop-blur-xl border border-white/10 px-4 py-2 rounded-2xl shadow-lg flex items-center gap-1">
+      <div className="bg-white/90 border border-stone-200/80 px-4 py-2 rounded-2xl shadow-sm shadow-stone-200/60 flex items-center gap-1">
         {[0, 1, 2].map((i) => (
           <motion.span
             key={i}
-            className="w-2 h-2 bg-stone-300 rounded-full"
+            className="w-2 h-2 bg-amber-400 rounded-full"
             animate={{ y: [0, -6, 0], opacity: [0.4, 1, 0.4] }}
             transition={{
               duration: 0.8,
