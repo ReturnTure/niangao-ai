@@ -20,3 +20,6 @@ services:
         value: https://api.deepseek.com
       - key: LLM_MODEL
         value: deepseek-chat
+      # 部署完成后填前端域名，例如 https://niangao-ai.vercel.app
+      - key: CORS_ORIGINS
+        sync: false

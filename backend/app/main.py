@@ -1,3 +1,5 @@
+import os
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -18,6 +20,11 @@ origins = [
     "http://localhost:4173",   # Vite preview
     "http://127.0.0.1:4173",
 ]
+
+# 线上前端域名和本地不一样，用环境变量补进去，
+# 这样同一份代码本地和云端都能跑，换域名不用改代码
+extra_origins = os.getenv("CORS_ORIGINS", "")
+origins += [o.strip() for o in extra_origins.split(",") if o.strip()]
 
 app.add_middleware(
     CORSMiddleware,
