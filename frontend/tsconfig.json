@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+
+    "jsx": "react-jsx",
+
+    /* 全站已迁移为 TS：不再允许 .js/.jsx 混入源码，
+       免得以后新增文件绕过类型检查（assets 里的图片走 vite/client 的声明） */
+    "allowJs": false,
+
+    "noEmit": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": true,
+
+    /* 所有 .ts/.tsx 一律按严格模式检查：空值必须显式处理，
+       这也是语音模块里 Promise / AudioContext 能写对的原因 */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+
+    "types": ["vite/client"]
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}

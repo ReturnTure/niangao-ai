@@ -8,10 +8,19 @@
 4. 危机关键词兜底：识别到高风险表达时，让前端展示求助渠道
 """
 
+import json
 import os
 
 from dotenv import load_dotenv
 from openai import AsyncOpenAI
+
+from app.services.tools import (
+    TOOLS,
+    STATUS_TEXT,
+    execute_tool,
+    should_use_tools,
+)
+from app.services.rag import retrieve, format_context, get_crisis_items
 
 load_dotenv()
 
@@ -23,6 +32,9 @@ MODEL = os.getenv("LLM_MODEL", "deepseek-chat").strip()
 
 # 保留最近几轮对话作为上下文（每轮 = 一问一答）
 HISTORY_LIMIT = 8
+
+# 检索增强开关：设为 0 可整体关闭（检索异常时也可作为降级手段）
+RAG_ENABLED = os.getenv("RAG_ENABLED", "1").strip() != "0"
 
 # ---------------- 系统人设 ---------------- #
 
@@ -103,10 +115,35 @@ def get_client() -> AsyncOpenAI:
 
 # ---------------- 上下文组装 ---------------- #
 
-def build_messages(message: str, history=None):
+def retrieve_context(message: str):
+    """检索并整理参考资料。
+
+    返回 (context_text, refs)。refs 是给界面看的来源标题，
+    让用户能看到年糕这句话的依据来自哪里。
+    """
+    if not RAG_ENABLED:
+        return "", []
+
+    items = retrieve(message, top_k=3)
+
+    # 危机表达必须带上求助资源，不能被检索阈值挡掉
+    if detect_crisis(message):
+        seen = {it["id"] for it in items}
+        for extra in get_crisis_items():
+            if extra["id"] not in seen:
+                items.insert(0, extra)
+
+    refs = [it["title"] for it in items[:3] if it.get("title")]
+
+    return format_context(items), refs
+
+
+def build_messages(message: str, history=None, refs_out=None):
     """
     history 结构：[{"message": "用户说的", "response": "年糕回的"}, ...]
     只保留最近 HISTORY_LIMIT 轮，避免 token 超限。
+
+    refs_out：传入列表时，把本轮命中的资料标题填进去（供界面展示来源）。
     """
     messages = [{"role": "system", "content": SYSTEM_PROMPT}]
 
@@ -121,20 +158,114 @@ def build_messages(message: str, history=None):
             messages.append({"role": "user", "content": user_text})
             messages.append({"role": "assistant", "content": bot_text})
 
+    # 检索增强：从本地知识库找出几条相关资料作为事实依据。
+    # 没有相关内容时返回空字符串，不注入——宁可少给依据，也不塞无关材料。
+    context, refs = retrieve_context(message)
+
+    if context:
+        messages.append({"role": "system", "content": context})
+
+    if refs_out is not None and refs:
+        refs_out.extend(refs)
+
     messages.append({"role": "user", "content": message})
 
     return messages
 
 
+# ---------------- 工具决策（Function Calling） ---------------- #
+
+async def decide_tools(message: str, history=None, user_email: str = ""):
+    """让模型自己判断要不要查数据。
+
+    返回 (assistant_tool_msg, tool_messages, used_names)：
+    - 模型认为不需要工具时，第一项为 None，调用方照常流式生成；
+    - 需要时返回完整的 assistant(tool_calls) 与 tool 结果，供第二轮生成使用。
+
+    这一轮用低温度、短输出，只为了拿「要不要查、查什么」，
+    真正对用户说话的那一轮仍然是 temperature 0.75 的流式生成。
+    """
+    client = get_client()
+
+    response = await client.chat.completions.create(
+        model=MODEL,
+        messages=build_messages(message, history),
+        tools=TOOLS,
+        tool_choice="auto",
+        temperature=0.2,
+        max_tokens=256,
+        stream=False,
+    )
+
+    msg = response.choices[0].message
+    calls = getattr(msg, "tool_calls", None) or []
+
+    if not calls:
+        return None, [], []
+
+    assistant_msg = {
+        "role": "assistant",
+        "content": msg.content or "",
+        "tool_calls": [
+            {
+                "id": call.id,
+                "type": "function",
+                "function": {
+                    "name": call.function.name,
+                    "arguments": call.function.arguments or "{}",
+                },
+            }
+            for call in calls
+        ],
+    }
+
+    tool_messages = []
+    used_names = []
+
+    for call in calls:
+        name = call.function.name
+
+        try:
+            args = json.loads(call.function.arguments or "{}")
+        except Exception:
+            args = {}
+
+        result = execute_tool(name, args, user_email)
+
+        used_names.append(name)
+        tool_messages.append(
+            {
+                "role": "tool",
+                "tool_call_id": call.id,
+                "content": result,
+            }
+        )
+
+    return assistant_msg, tool_messages, used_names
+
+
 # ---------------- 非流式回复 ---------------- #
 
-async def generate_ai_response(message: str, history=None) -> str:
+async def generate_ai_response(message: str, history=None, user_email: str = "") -> str:
     try:
         client = get_client()
+        messages = build_messages(message, history)
+
+        # 需要事实（情绪趋势 / 自评结果 / 求助资源）时先让模型自己决定查不查
+        if user_email and should_use_tools(message):
+            try:
+                assistant_msg, tool_messages, _ = await decide_tools(
+                    message, history, user_email
+                )
+                if assistant_msg:
+                    messages = messages + [assistant_msg] + tool_messages
+            except Exception as plan_error:
+                # 工具规划失败不该影响正常对话，退回纯对话
+                print("TOOL PLAN ERROR:", repr(plan_error))
 
         response = await client.chat.completions.create(
             model=MODEL,
-            messages=build_messages(message, history),
+            messages=messages,
             temperature=0.75,
             max_tokens=1024,
             stream=False,
@@ -149,15 +280,44 @@ async def generate_ai_response(message: str, history=None) -> str:
 
 # ---------------- 流式回复 ---------------- #
 
-async def stream_ai_response(message: str, history=None):
-    """逐块产出文本片段；换行原样保留，由上层负责 SSE 包装。"""
+async def stream_ai_response(message: str, history=None, user_email: str = ""):
+    """产出 ("status", 文案) 或 ("delta", 文本片段)，由上层负责 SSE 包装。
+
+    status 只在真的调用了工具时出现，前端据此显示「年糕正在看你的记录…」，
+    让用户知道这段停顿不是卡住了。
+    """
 
     try:
         client = get_client()
+        refs = []
+        messages = build_messages(message, history, refs_out=refs)
 
+        # 先告诉前端这句话的依据来自哪几条资料（可解释性）
+        if refs:
+            yield ("refs", refs)
+
+        # 第一步：让模型决定要不要查数据；查到的结果作为 tool 消息带回第二轮
+        if user_email and should_use_tools(message):
+            try:
+                assistant_msg, tool_messages, used_names = await decide_tools(
+                    message, history, user_email
+                )
+
+                if assistant_msg:
+                    messages = messages + [assistant_msg] + tool_messages
+                    hint = STATUS_TEXT.get(
+                        used_names[0] if used_names else "", "年糕正在查资料…"
+                    )
+                    yield ("status", hint)
+
+            except Exception as plan_error:
+                # 规划失败就退回纯对话，不让工具拖垮主链路
+                print("TOOL PLAN ERROR:", repr(plan_error))
+
+        # 第二步：带着（可能存在的）工具结果流式生成最终回复
         stream = await client.chat.completions.create(
             model=MODEL,
-            messages=build_messages(message, history),
+            messages=messages,
             temperature=0.75,
             max_tokens=1024,
             stream=True,
@@ -174,13 +334,13 @@ async def stream_ai_response(message: str, history=None):
 
             if text:
                 produced = True
-                yield text
+                yield ("delta", text)
 
         if not produced:
-            yield "我在呢，只是刚才有点走神了，你再说一遍好吗？"
+            yield ("delta", "我在呢，只是刚才有点走神了，你再说一遍好吗？")
 
     except Exception as e:
-        yield _friendly_error(e)
+        yield ("delta", _friendly_error(e))
 
 
 # ---------------- 错误兜底 ---------------- #

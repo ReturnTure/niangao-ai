@@ -28,3 +28,11 @@ Thumbs.db
 *.njsproj
 *.sln
 *.sw?
+
+# 语音播报：TTS 缓存与试听样本，不进仓库
+backend/.cache/
+backend/samples/
+backend/models/
+
+# 本地临时渲染脚本（依赖本机 Temp 路径）
+*.tmp.cjs

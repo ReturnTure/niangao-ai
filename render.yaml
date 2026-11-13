@@ -3,6 +3,9 @@ services:
     name: niangao-backend
     env: python
     rootDir: backend
+    # 语音（可选）：云端没有装 edge-tts / vosk，播报会自动降级成浏览器语音、麦克风按钮自动隐藏。
+    # 想开服务端播报：把下面的 buildCommand 末尾加上 `&& pip install edge-tts`。
+    # 离线识别不建议在免费实例开（Vosk 模型常驻约 100~200MB 内存）。
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
     envVars:

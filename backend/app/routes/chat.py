@@ -77,7 +77,7 @@ async def chat(req: ChatCreate, user=Depends(get_current_user)):
     try:
         history = load_history(user["email"])
 
-        ai_reply = await generate_ai_response(req.message, history)
+        ai_reply = await generate_ai_response(req.message, history, user["email"])
 
         save_turn(user["email"], req.message, ai_reply)
 
@@ -111,20 +111,43 @@ async def chat_stream(
         nonlocal full_text, disconnected
 
         try:
-            async for chunk in stream_ai_response(req.message, history):
+            async for item in stream_ai_response(req.message, history, user["email"]):
 
                 if await request.is_disconnected():
                     print("⚠️ Client disconnected")
                     disconnected = True
                     break
 
-                if not chunk or not isinstance(chunk, str):
+                if not item:
                     continue
 
-                full_text += chunk
+                kind, text = item
+
+                # 本轮回答引用的资料标题，前端在气泡下方显示「依据」
+                if kind == "refs":
+                    if text:
+                        yield "data: " + json.dumps(
+                            {"refs": text}, ensure_ascii=False
+                        ) + "\n\n"
+                        yield ": keep-alive\n\n"
+                    continue
+
+                # 工具调用的过渡状态：前端显示「年糕正在看你的记录…」
+                if kind == "status":
+                    if text:
+                        yield "data: " + json.dumps(
+                            {"status": text}, ensure_ascii=False
+                        ) + "\n\n"
+                        yield ": keep-alive\n\n"
+                    continue
+
+                if not text:
+                    continue
+
+                full_text += text
 
                 # ✅ 统一发 JSON 帧：换行、引号都能安全穿过 SSE
-                yield "data: " + json.dumps({"delta": chunk}, ensure_ascii=False) + "\n\n"
+                yield "data: " + json.dumps({"delta": text}, ensure_ascii=False) + "\n\n"
 
                 # ✅ 保活注释，防止中间层缓冲
                 yield ": keep-alive\n\n"

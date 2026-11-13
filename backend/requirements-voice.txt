@@ -1,0 +1,13 @@
+> 语音相关的可选依赖。主程序不装也能跑（播报降级浏览器语音，识别按钮自动隐藏）。
+>
+>   cd backend
+>   venv\Scripts\pip install -r requirements-voice.txt
+>
+> 注意：vosk 的**中文模型不在 pip 里**，需要单独下载解压到 backend/models/，
+> 详见项目根目录 VOICE.md「三、准备模型」一节。
+
+# 语音播报（TTS，微软 Edge 在线声音，免费无需 Key）
+edge-tts
+
+# 离线语音识别（ASR，模型另下）
+vosk
