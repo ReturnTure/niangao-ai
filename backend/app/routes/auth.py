@@ -55,7 +55,6 @@ def login(user: UserLogin):
         ):
             raise HTTPException(status_code=401, detail="Invalid credentials")
 
-        # ✅ Normalize
         normalized_user = {
             "_id": str(db_user["_id"]),
             "email": db_user["email"],

@@ -26,7 +26,6 @@ export default function ChatLayout() {
 
   const navigate = useNavigate();
 
-  // 路由保护
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {

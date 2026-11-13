@@ -92,12 +92,10 @@ export default function ChatWindow({ chat, setChat }: ChatWindowProps) {
     mic.toggle();
   }, [mic, stopSpeech]);
 
-  // Auto-scroll
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chat, loading]);
 
-  // Auto resize
   useEffect(() => {
     const ta = textareaRef.current;
     if (!ta) return;
@@ -105,7 +103,6 @@ export default function ChatWindow({ chat, setChat }: ChatWindowProps) {
     ta.style.height = Math.min(ta.scrollHeight, 160) + "px";
   }, [input]);
 
-  // Focus input
   useEffect(() => {
     textareaRef.current?.focus();
   }, [loading]);
