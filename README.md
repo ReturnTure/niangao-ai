@@ -182,11 +182,19 @@ Windows 下双击 `start.bat`，会自动创建虚拟环境、安装依赖并同
 
 ## 十、部署
 
-- 后端：Render（`render.yaml` 已配置，需在面板中填入 `MONGO_URI` 与 `LLM_API_KEY`）
-- 前端：Vercel / Netlify，构建产物为 `frontend/dist`
-- 数据库：MongoDB Atlas 免费集群
+当前状态：**前后端均未部署到公网**。配置已备齐，但因平台注册验证与域名可达性问题暂缓；本地按第二节步骤即可完整运行，全部功能可用。
 
-部署后请把前端域名加入 `backend/app/main.py` 的 CORS `origins` 列表。
+| 环节 | 方案 | 就绪情况 |
+| --- | --- | --- |
+| 代码托管 | GitHub 公开仓库 | 已就绪，保留完整提交历史 |
+| 后端 | Render（`render.yaml`） | 配置齐备，密钥全部走面板注入（`sync: false`），尚未创建实例 |
+| 前端 | Vercel / Netlify | 构建产物为纯静态目录，可直接上传；曾试部署，所分配域名在国内解析异常，访问超时 |
+| 数据库 | MongoDB Atlas 免费集群 | 已连通，本地与云端共用同一份连接配置 |
+
+部署时需要注意两点：
+
+1. **跨域不硬编码域名。** 后端 `app/main.py` 内置本地开发地址，线上前端域名通过 `CORS_ORIGINS` 环境变量注入（多个用逗号分隔），换域名只需改环境变量并重启，不需要改代码再发版。
+2. **必须注入的环境变量**：`MONGO_URI`、`DB_NAME`、`JWT_SECRET`、`JWT_REFRESH_SECRET`、`LLM_API_KEY`、`LLM_BASE_URL`、`LLM_MODEL`、`CORS_ORIGINS`。完整模板见 `backend/.env.example` 与 `frontend/.env.example`。
 
 ## 十一、团队信息
 
@@ -213,6 +221,8 @@ Windows 下双击 `start.bat`，会自动创建虚拟环境、安装依赖并同
 
 - [x] 情绪日志与情绪周报（ECharts 可视化）
 - [x] PHQ-9 标准化心理自评量表（九题 · 五档分级 · 第 9 题单独风险判定）
-- [ ] GAD-7 焦虑自评量表
-- [ ] 心理知识库 RAG（CBT 自助技巧）
-- [ ] 语音输入与朗读
+- [x] 心理知识库 RAG（98 张 CBT 自助知识卡片 · 字符级 BM25 · 零额外依赖）
+- [x] 语音输入与朗读（edge-tts 流式分句播报 + Vosk 离线识别，双层降级）
+- [x] Function Calling 工具层（4 个只读工具，模型自主决策）
+- [x] 前端全量 TypeScript 化（31 个文件 · strict + noUnusedLocals）
+- [ ] GAD-7 焦虑自评量表（本版本有意不做：与 PHQ-9 覆盖重叠，避免量表堆叠）
