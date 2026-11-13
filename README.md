@@ -101,7 +101,35 @@
 
 ## 六、快速开始
 
-**环境要求**：Python 3.11+、Node.js 18+、MongoDB（本地或 Atlas 免费集群）
+**环境要求**：Python 3.11+、Node.js 18+、MongoDB
+
+### 0. 准备数据库
+
+项目用 MongoDB 存对话、量表与周报数据，以下两种方式任选其一：
+
+**方式一：本地安装（推荐，离线可用）**
+
+```bash
+winget install MongoDB.Server
+```
+
+也可以从 <https://www.mongodb.com/try/download/community> 下载安装。安装完成后 MongoDB 会作为 Windows 服务自动运行，默认监听 `27017`，`.env` 里的 `MONGO_URI` 保持默认 `mongodb://localhost:27017` 即可。
+
+验证是否就绪：
+
+```bash
+mongosh --eval "db.runCommand({ping:1})"
+```
+
+返回 `{ ok: 1 }` 即为正常。
+
+**方式二：MongoDB Atlas 免费集群（无需本地安装）**
+
+在 <https://www.mongodb.com/cloud/atlas> 创建一个 M0 免费集群，进入 **Connect → Drivers** 复制连接串填入 `.env` 的 `MONGO_URI`。两点注意：
+
+- 串里的 `<password>` 要替换成真实密码；密码含 `@`、`#`、`%`、`/` 等字符时需 URL 编码
+- 左侧 **Network Access** 需放行访问 IP（演示可直接加 `0.0.0.0/0`）
+- 若启动报 `The DNS operation timed out`，说明本机 DNS 不转发 SRV 查询，在 `.env` 里加一行 `DNS_RESOLVERS=223.5.5.5` 即可绕开
 
 ### 1. 后端
 
