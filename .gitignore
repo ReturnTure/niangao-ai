@@ -15,6 +15,7 @@ frontend/.history/
 # General
 .env
 *.log
+*.bak
 .DS_Store
 Thumbs.db
 
